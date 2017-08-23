@@ -46,6 +46,7 @@ namespace XamarinPhoneword
             });
 
             translateButton.Clicked += OnTranslate;
+            callButton.Clicked += OnCall;
             this.Content = panel;
         }
 
@@ -63,6 +64,20 @@ namespace XamarinPhoneword
             {
                 callButton.IsEnabled = false;
                 callButton.Text = "Call";
+            }
+        }
+
+        private async void OnCall(object sender, EventArgs e)
+        {
+            if(await this.DisplayAlert(
+                "Dail a Number",
+                "Would you like to call " + translatedNumber + "?",
+                "Yes",
+                "No"))
+            {
+                var dialer = DependencyService.Get<IDialer>();
+                if (dialer != null)
+                    await dialer.DialAsync(translatedNumber);
             }
         }
     }
